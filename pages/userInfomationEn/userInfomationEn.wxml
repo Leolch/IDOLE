@@ -1,0 +1,75 @@
+<view class="back_img">
+  <view class="place">{{exhibitionPlace}}</view>
+<view class="border_w">
+  <view class="container">
+    <view class="border_n">
+      <l-form name="userInfo" l-form-btn-class="l-form-btn-class" bind:linsubmit="submit">
+      <l-form-item label="Name：" name="userName" rules="{{userInfo.nameRules}}" l-form-label-class="l-label-class">
+          <l-input id="userName" l-input-class="l-input-class" bind:lininput="nameChange" value="{{userName}}" hide-label show-row="{{false}}"/>
+      </l-form-item>
+      <view class="line"></view>
+
+      <l-form-item l-form-label-class="l-label-class" rules="{{userInfo.companyNameRules}}" label="Company name：" name="companyName">
+          <l-input id="companyName" bind:lininput="companyChange" l-input-class="l-input-class" value="{{companyName}}" hide-label show-row="{{false}}"/>
+      </l-form-item>
+      <view class="line"></view>
+
+      <l-form-item l-form-label-class="l-label-class" label="Country：" name="country" rules="{{userInfo.country}}">
+        <l-radio-group none-checked="{{false}}" current="{{country}}" id="country" placement="row" bind:linchange="radioChange">
+            <l-radio select-color="#dddddd" key="china">
+                <view class="text">China</view>
+            </l-radio>
+            <l-radio select-color="#dddddd" key="other">
+              <view class="text">Other</view>
+            </l-radio>
+        </l-radio-group>
+      </l-form-item>
+     
+      <l-form-item l-form-label-class="l-label-class" wx:if="{{country==='other'}}" rules="{{userInfo.countryName}}" label=" " name="countryName">
+        <l-input id="countryName" l-input-class="l-input-class" bind:lininput="countryNameChange" placeholder="Please enter your country name" value="{{countryName}}" hide-label show-row="{{false}}"/>
+      </l-form-item>
+      <view class="line"></view>
+     
+      <l-form-item l-form-label-class="l-label-class" label="Region (required for China)：" name="region">
+        <view class="section">
+          <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
+            <view class="picker">
+              {{region[0] || 'Province'}}-{{region[1] || 'City'}}-{{region[2] || 'District'}}
+            </view>
+          </picker>
+        </view>
+      </l-form-item>
+      <view class="line"></view>
+
+      <l-form-item l-form-label-class="l-label-class" rules="{{userInfo.businessTypeRules}}" label="Business category：：" name="multiIndex">
+        <view class="section">
+          <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
+            <view class="picker">
+              {{multiArray[0][multiIndex[0]]}}{{multiArray[0][multiIndex[0]] === 'Other'? '': '-'}}{{multiArray[1][multiIndex[1]]}}
+            </view>
+          </picker>
+        </view>
+      </l-form-item>
+      <l-form-item wx:if="{{multiArray[0][multiIndex[0]] === 'Other'}}" label=" " rules="{{userInfo.businessOhtherRules}}" name="businessOther">
+        <l-input id="businessOther" l-input-class="l-input-class" bind:lininput="businessOtherChange" placeholder="请填写业务类型" value="{{businessOther}}" hide-label show-row="{{false}}" clear="{{true}}"/>
+      </l-form-item>
+      <view class="line"></view>
+      
+      <view class="l-form-btn-class">
+          <l-button type="success" bind:lintap="submit" plain> <view class="sub">submit</view></l-button>
+      </view>
+      </l-form>
+    </view>
+  </view>
+</view>
+  
+ 
+  <l-toast
+    show="{{toastShow}}"
+    title="{{toastTitle}}"
+  />
+<loading is-loading="{{loading}}"></loading>
+  <view class="English" bind:tap="handleTranslate">
+    中
+  </view>
+</view>

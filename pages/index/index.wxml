@@ -1,0 +1,58 @@
+
+<view class='pagecontainer' wx-if="{{!loginShow}}">
+<view class="topfix">
+  <view class="handContainer">
+    <text class="handlein">手动输入：</text>
+    <input 
+      placeholder="请输入编码"
+      placeholder-class="handplace"
+      class="inputclass"
+      confirm-type="search"
+      bindconfirm="handleSearch"
+      bindinput="handleChange"
+      bindblur="handleBlur"
+      bindfocus="handleFocus"
+      model:value="{{handleVal}}"
+      type="text"/>
+      <!-- <view wx:if="{{dropdownShow}}" class="dropdown">
+        <view wx:for="{{itemcodeDrop}}" class="drop-item" wx-key="index" bind:tap="handleSelect" data-itemcode="{{item}}">{{item}}</view>
+      </view> -->
+    <button size="mini" type="default" class="mini-btn searchBtn" bindtap="handleSearch">查询<icon class="icon-small searchIcon" type="search" size="15" color="green"></icon></button>
+  </view>
+  <!-- <view>
+    <button class="button" type="primary" bind:tap="handleScan">面料扫码查询</button>
+  </view> -->
+  <view class="currentCode" >
+    <text class="curCode">货号: {{currentCode || '空'}}</text>
+    <view class="linkCheck" bind:tap="handleLinkCheck">查看现货情况</view>
+  </view>
+   <view class="allCount">
+    <text class="countText">查询总条数：</text>
+    <text class="Searchcount">{{detailObj.length || 0}}条</text>
+   </view>
+   <view class="detailres detailresUn">
+    <text wx-if="{{widthUn}}" class="detaiitem">幅宽：{{widthUn}}</text>
+    <text wx-if="{{weightUn}}" class="detaiitem">克重：{{weightUn}}</text>
+  </view>
+</view>
+<view class="blockCon"></view>
+<loading is-loading="{{isLoading}}">
+</loading>
+<view class="marginContainer">
+  <view wx-if="{{eleUn}}" class="chengfen">成分：{{eleUn}}</view>
+  <view wx:if="{{detailObj.length}}" wx:for="{{detailObj}}" wx:key="index" class="detailContainer">
+    <view  class="detailres" >
+      <text class="detaiitem">备注：{{item['备注']}}</text>
+      <view class="detailNum">
+        <text class="detaiitem">报价方式({{item['报价方式'] || '空'}})：{{item['单价']}}</text>
+        <text class="detaiitemNum">第{{index+1}}条</text>
+      </view>
+    </view>
+  </view>
+</view>
+</view>
+<loginmodel is-show="{{loginShow}}" bindgetphone="getPhone"></loginmodel>
+
+
+
+

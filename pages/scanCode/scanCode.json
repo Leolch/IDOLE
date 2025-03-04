@@ -1,0 +1,16 @@
+{
+  "usingComponents": {
+   "l-button": "lin-ui/button/index",
+   "l-form": "lin-ui/form/index",
+   "l-form-item": "lin-ui/form-item/index",
+   "l-input": "lin-ui/input/index",
+   "l-radio-group": "lin-ui/radio-group/index",
+   "l-radio": "lin-ui/radio/index",
+   "l-toast": "lin-ui/toast/index",
+   "l-card": "../component/linUi/card/index",
+   "loginmodelScan": "../component/loginmodelScan/loginmodelScan",
+   "loading": "../component/loading/loading"
+  },
+  "navigationBarTitleText": "SICILY-VIP",
+  "navigationBarBackgroundColor": "#eee"
+}

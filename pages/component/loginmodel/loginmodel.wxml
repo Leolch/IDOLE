@@ -1,0 +1,24 @@
+
+<!-- <view wx:if="{{isShow}}" class="loadingContainer">
+  <button plain size="mini" type="primary" class="loginBtn" open-type="getPhoneNumber" bindgetphonenumber="getUserPhone">手机号登录</button>
+</view> -->
+<view wx:if="{{isShow}}" class="loadingContainer">
+    <button plain size="mini" type="primary" class="loginBtn" open-type="getPhoneNumber" bindgetphonenumber="getUserPhone">手机号登录</button>
+  
+  <!-- <view class="back_img"></view> -->
+  <video class="video" object-fit="cover" enable-danmu="{{true}}" controls="{{false}}" style="height: 100%;width: 100%;" autoplay="true" loop="true" src="https://yicaishishang.hsk.top/images/ce2ed8aee04b41a52f58cb89a66dc0bb_preview.MP4"/>
+  <view class="toknow" wx:if="{{textShow}}">
+    <view class="knowTittle">用户须知</view>
+    <view>1.本小程序仅对于 <text class="annotation">SICIL有限公司</text>有权限的 <text class="annotation">内部员工</text>开放。</view>
+    <view>2.本小程序仅适用于<text class="annotation">SICILY有限公司</text>内部有权限员工 <text class="annotation">查询布料</text> 相关信息。</view>
+    <view>3.本小程序关联<text class="annotation">SICILY有限公司</text>内部资料，非公司内部人员<text class="red">无权限进入</text>，违法必究，敬请谅解。</view>
+    <view>4.本小程序因权限需要需授权手机号，但<text class="red">不会保存或收集用户手机号。</text></view>
+    <view class="btn viewcon">
+      <button class="btn-c" type="warn" size="mini" plain="true">
+        <navigator target="miniProgram" open-type="exit">拒绝并退出</navigator>
+      </button>
+      <button class="btn-c" size="mini" type="primary" plain="true" bindtap="handleIn">同意并进入</button>
+      <!-- <button class="btn-c" size="mini" type="primary" plain="true" bindtap="goScanCode">同意并进入扫样</button> -->
+    </view>
+  </view>
+</view>

@@ -1,0 +1,66 @@
+<view class="back_img" catchtouchmove="ontouchmove">
+<view class="place">{{mainShow ? 'SICILY时尚' : exhibitionPlace || "请选择展会" }}</view>
+<l-card wx:if="{{!mainShow}}" l-class="card" type="primary"
+  plaintext="{{true}}"
+  title="">
+  <view>
+    <view wx:if="{{exhibitionArr.length}}" wx:for="{{exhibitionArr}}" wx:key="index" class="{{exhibitionPlace===item ? 'hover-c' :'card-content'}}" bind:tap="handleChoose" data-exhibitionPlace="{{item}}">
+    {{item}}
+    </view>
+  </view>
+  <view class="l-form-btn-class">
+      <l-button type="success" bind:lintap="handleEnter" plain> <view class="sub">进入</view></l-button>
+  </view>
+</l-card>
+  <view wx:if="{{mainShow}}" class="border_w">
+    <view class="container">
+      <view class="border_n">
+        <l-form name="userInfo" l-form-btn-class="l-form-btn-class" bind:linsubmit="submit">
+          <!-- <l-form-item l-form-label-class="l-label-class" label="展区：" name="exhibitionId">
+              <view class="section">
+                {{exhibitionPlace}}
+              </view>
+            </l-form-item>
+            <view class="line"></view> -->
+          <l-form-item l-form-label-class="l-label-class" label="类型：" name="userType" rules="{{userInfo.userTypeRules}}">
+              <l-radio-group current="{{userType}}" id="userType" placement="row" bind:linchange="radioChange">
+                  <l-radio select-color="#ddd" key="new">
+                      <view class="text">新客户</view>
+                  </l-radio>
+                  <l-radio select-color="#ddd" key="old">
+                    <view class="text">老客户</view>
+                  </l-radio>
+              </l-radio-group>
+            </l-form-item>
+            <view class="line"></view>
+            <l-form-item wx:if="{{userType === 'new'}}" l-form-label-class="l-label-class" rules="{{userInfo.companyAddressRules}}" label="所在城市：" name="companyName">
+                <l-input id="companyAddress" bind:lininput="companyAddressChange" l-input-class="l-input-class" value="{{companyAddress}}" hide-label show-row="{{false}}"/>
+            </l-form-item>
+            <view class="line"></view>
+            <l-form-item l-form-label-class="l-label-class" rules="{{userInfo.companyNameRules}}" label="公司名称：" name="companyName">
+                <l-input id="companyName" bind:lininput="companyChange" l-input-class="l-input-class" value="{{companyName}}" hide-label show-row="{{false}}"/>
+            </l-form-item>
+            <view class="line"></view>
+            <l-form-item label="联系电话：" l-form-row-class="l-row-class" name="contactNum" rules="{{userInfo.contactNumRules}}" l-form-label-class="l-label-class">
+                <l-input id="contactNum" type="number" l-input-class="l-input-class" bind:lininput="contactNumChange" value="{{contactNum}}" hide-label show-row="{{false}}"/>
+            </l-form-item>
+            <view class="line"></view>
+            <l-form-item label="联系人：" l-form-row-class="l-row-class" name="contactor" rules="{{userInfo.contactorRules}}" l-form-label-class="l-label-class">
+                <l-input id="contactor" l-input-class="l-input-class" bind:lininput="contactorChange" value="{{userName}}" hide-label show-row="{{false}}"/>
+            </l-form-item>
+            <view class="line"></view>
+           
+            <view class="l-form-btn-class">
+                <l-button type="success" bind:lintap="submit" plain> <view class="sub">提交</view></l-button>
+            </view>
+        </l-form>
+      </view>
+    </view>
+  </view>
+  <l-toast
+    show="{{toastShow}}"
+    title="{{toastTitle}}"
+  />
+<loginmodelScan is-show="{{isLoading}}" bindgetphone="getPhone"></loginmodelScan>
+<loading is-loading="{{loading}}"></loading>
+</view>

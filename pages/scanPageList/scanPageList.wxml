@@ -1,0 +1,36 @@
+<!--pages/welcomPage/index.wxml-->
+<view class="back">
+  <!-- <view class="date-filter">
+    <l-calendar bind:linconfirm="handleDateChange" bind:linclose="handleCloseCalendar" show="{{calendarShow}}" type="single" show-title="{{false}}" />
+    <view class="date-picker" bind:tap="handleShowCalendar">
+      <text>选择日期：{{selectedDate || '全部'}}</text>
+      <l-icon name="down" color="#333" size="22"/>
+    </view>
+  </view> -->
+  <view class="content">
+    <view class="detail">
+      <l-slide-view wx:if="{{scanDetailArr.length}}" wx:for="{{scanDetailArr}}" auto-close="true" wx:key="index" height="195" width="750">
+        <view slot="left" class="left">
+          <view class='left-con'>
+            <text class='left-title'>克重: {{item.kz || ''}}</text>
+            <text class='left-title'>{{item.color ? "颜色："+item.color : '幅宽：' + (item.kf || '')}}</text>
+            <text class='left-title'>成分:{{item.cf || ''}}</text>
+            <text wx:if="{{item.isProxy === '是'}}" class='left-title last'>代扫:{{item.proxyContent}}</text>
+          </view> 
+          <view class='left-code'>
+            <text class="l-t">{{item['itemCodeSearch']}}</text>
+            <text class="s-type">{{"来源："+item.sourceType||''}}</text>
+            <text class='s-type'>{{item.updateTime}}</text>
+          </view>
+        </view>
+      </l-slide-view>
+      <view wx:if="{{!scanDetailArr.length}}" class="n-c">
+        暂无数据
+      </view>
+      <view class="d-c"></view>
+    </view>
+  </view>
+</view>
+<loading is-loading="{{isLoading}}">
+</loading>
+

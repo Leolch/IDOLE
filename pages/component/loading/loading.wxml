@@ -1,0 +1,2 @@
+
+<view wx:if="{{isLoading}}" class="loadingContainer"></view>

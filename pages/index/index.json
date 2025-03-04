@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "loading": "../component/loading/loading",
+    "loginmodel": "../component/loginmodel/loginmodel"
+  },
+  "navigationBarTitleText": "货号查询",
+  "navigationBarBackgroundColor": "#eee"
+ 
+}

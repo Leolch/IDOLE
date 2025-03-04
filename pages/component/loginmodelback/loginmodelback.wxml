@@ -1,0 +1,9 @@
+
+<!-- <view wx:if="{{isShow}}" class="loadingContainer">
+  <button plain size="mini" type="primary" class="loginBtn" open-type="getPhoneNumber" bindgetphonenumber="getUserPhone">手机号登录</button>
+</view> -->
+<view wx:if="{{isShow}}" class="loadingContainer">
+  <button plain size="mini" type="primary" class="loginBtn" open-type="getPhoneNumber" bindgetphonenumber="getUserPhone">手机号登录</button>
+  <!-- <view class="back_img"></view> -->
+  <video class="video" object-fit="cover" enable-danmu="{{true}}" controls="{{false}}" style="height: 100%;width: 100%;" autoplay="true" src="https://yicaishishang.hsk.top/images/zhanhui07555.MP4"/>
+</view>

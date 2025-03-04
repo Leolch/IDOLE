@@ -1,0 +1,55 @@
+{
+  "description": "项目配置文件",
+  "setting": {
+    "bundle": false,
+    "userConfirmedBundleSwitch": false,
+    "urlCheck": true,
+    "scopeDataCheck": false,
+    "coverView": true,
+    "es6": true,
+    "postcss": true,
+    "compileHotReLoad": false,
+    "lazyloadPlaceholderEnable": false,
+    "preloadBackgroundData": false,
+    "minified": true,
+    "autoAudits": false,
+    "newFeature": false,
+    "uglifyFileName": true,
+    "uploadWithSourceMap": true,
+    "useIsolateContext": true,
+    "nodeModules": true,
+    "enhance": true,
+    "useMultiFrameRuntime": true,
+    "showShadowRootInWxmlPanel": true,
+    "packNpmManually": true,
+    "enableEngineNative": false,
+    "packNpmRelationList": [
+      {
+        "packageJsonPath": "./package.json",
+        "miniprogramNpmDistDir": "./miniprogram_npm"
+      }
+    ],
+    "minifyWXSS": true,
+    "showES6CompileOption": false,
+    "minifyWXML": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "condition": true,
+    "ignoreUploadUnusedFiles": true
+  },
+  "compileType": "miniprogram",
+  "condition": {},
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  },
+  "appid": "wxcd649aea6ef1f333",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "simulatorPluginLibVersion": {}
+}

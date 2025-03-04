@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "loading": "../component/loading/loading"
+    },
+  "navigationBarTitleText": "现货状况",
+  "navigationBarBackgroundColor": "#eee"
+}
