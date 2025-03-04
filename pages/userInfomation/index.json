@@ -1,0 +1,15 @@
+{
+  "usingComponents": {
+   "l-button": "lin-ui/button/index",
+   "l-form": "lin-ui/form/index",
+   "l-form-item": "lin-ui/form-item/index",
+   "l-input": "lin-ui/input/index",
+   "l-radio-group": "lin-ui/radio-group/index",
+   "l-radio": "lin-ui/radio/index",
+   "l-toast": "lin-ui/toast/index",
+   "loginmodelback": "../component/loginmodelback/loginmodelback",
+   "loading": "../component/loading/loading"
+  },
+  "navigationBarTitleText": "SICILY-VIP",
+  "navigationBarBackgroundColor": "#eee"
+}

@@ -1,0 +1,247 @@
+page{
+  height:100%;
+}
+.topfix{
+  position: fixed;
+  top:0;
+  width: 100%;
+  background-color: white;
+  padding-bottom: 15rpx;
+  z-index: 9999;
+}
+.pagecontainer{
+  height: 100%;
+  width: 100%;
+}
+.searchbtn{
+  border-color: #5a5e68;
+}
+.searchIcon{
+  vertical-align: middle;
+}
+.button{
+  margin-bottom: 15rpx;
+}
+.handContainer{
+  padding: 25rpx 15rpx;
+  width: 100%;
+  display: flex;
+  border-bottom: 4rpx solid #ddd;
+  margin-bottom: 20rpx;
+  align-items: center;
+  border-radius: 2%;
+}
+.handplace .handin{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.handContainer .handplace .handin text{
+  color:#5a5e68;
+  font-size: 33rpx;
+  margin-left: 30rpx;
+}
+.handContainer .handplace .handin input{
+  color: #5a5e68;
+}
+.handCode{
+  margin-bottom: 25rpx;
+}
+.handplace{
+  color: rgb(150, 144, 144);
+  margin-right: 73rpx;
+}
+.currentCode{
+  padding: 0 45rpx;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+  color: #52555e;
+  display: flex;
+  justify-content: space-between;
+}
+.Searchcount{
+  padding: 0 30rpx;
+  margin-bottom: 5rpx;
+  color: #52555e;
+}
+.allCount{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.countText{
+  padding: 0 45rpx;
+  color: #52555e;
+}
+.searchBtn{
+  margin: 10rpx;
+}
+.blockCon{
+  width: 100%;
+  height: 310rpx;
+}
+.detailContainer{
+  background-color: rgb(169 226 172 / 30%);
+  margin: 20rpx 30rpx;
+  padding: 10rpx;
+  border-radius: 10rpx;
+  box-shadow: 10rpx 10rpx 8rpx 5rpx #ddd;
+}
+.detailNum{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.detailres .detaiitem{
+  color: rgb(83, 72, 72);
+  padding: 10rpx;
+}
+.detailres>.detaiitem{
+  border-bottom: 3rpx solid #ddd;
+}
+.detailres{
+  padding:0 10rpx;
+  display: flex;
+  flex-direction:column;
+}
+.detaiitemNum{
+  color: rgba(90, 75, 75, 0.5);
+  font-size: 27rpx;
+}
+.marginContainer{
+  width: 750rpx;
+  overflow-x: scroll;
+}
+.table__box{
+  width: 750rpx;
+  height: auto;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  border: 1px solid #E4E4E4; 
+}
+.table__box .table__scroll{
+  width: 1013rpx;
+  overflow: hidden;
+  height: 100% !important;
+  background: #FFF;
+}
+
+.table__box .table__scroll .table__header{
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  /* display: grid; 网格布局 */
+  /* grid-auto-flow 属性控制自动放置的项目如何插入网格中 */
+  /* column	通过填充每一列来放置项目 */
+  grid-auto-flow: column;
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #333333;
+  background: #F4F6FF;
+}
+.table__box .table__scroll .table__header .table__header__item{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+  background: #F4F6FF;
+  width: 55%;
+  height: 60rpx;
+  position: relative;
+  z-index: 888;
+  border: 1rpx solid #E4E4E4;
+  border-left: 0;
+  border-top: 0;
+}
+
+.table__box .table__scroll .table__header .table__header__item .timeicon{
+  padding-left: 10rpx;
+  color: #07b3f5;
+  font-weight: bold;
+  font-size: 35rpx;
+}
+.table__box .table__scroll .table__header .table__header__item:nth-child(n){
+  width: 250rpx;
+  position: sticky;
+  left: 0;
+  z-index: 999;
+}
+.table__box .table__scroll .table__content{
+  background-color: #fff;
+  /* 这是兼容 iPhone x */
+  margin-bottom: constant(safe-area-inset-bottom);
+  margin-bottom: env(safe-area-inset-bottom);
+}
+.table__box .table__scroll .table__content .table__content__line .line_top{
+  width: 100%;
+  display: flex;
+  grid-auto-flow: column;
+  position: relative;
+}
+.table__box .table__scroll .table__content .table__content__line .line_bottom{
+  border-bottom: 1rpx solid #ddd;
+  padding-left:95rpx;
+  font-size: 30rpx;
+}
+.table__box .table__scroll .table__content .table__content__line__item{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+  background-color: #fff;
+  height: 80rpx;
+  border: 1rpx solid #E4E4E4;
+  border-left: 0;
+  border-top: 0;
+  font-size: 26rpx;
+}
+.table__box .table__scroll .table__content .table__content__line__item:nth-child(n){
+  width: 250rpx;
+  position: sticky;
+  left: 0;
+}
+/* .table__box .table__scroll .table__content .table__content__line__item:nth-child(1){
+  color: rgb(25, 215, 240);
+  position: fixed;
+  width: 120rpx;
+  z-index: 9999;
+}
+.table__box .table__scroll .table__content .table__content__line__item:nth-child(2){
+  color: rgb(25, 215, 240);
+  width: 248rpx;
+}
+.table__box .table__scroll .table__content .table__content__line__item:nth-child(3){
+  font-weight: bold;
+  color: rgb(78, 142, 182);
+}
+.table__box .table__scroll .table__header .table__header__item:nth-child(1){
+  position: fixed;
+  left: 0;
+  z-index: 99999;
+  width: 121.5rpx;
+}
+.table__box .table__scroll .table__header .table__header__item:nth-child(2){
+  width: 253rpx;
+} */
+.marginContainer >.code_table_box >.table__scroll {
+  width: auto;
+}
+.code_table_box .table__scroll .table__content .table__content__line__item:nth-child(n) {
+  width: 50%;
+}
+.code_table_box .table__scroll .table__header .table__header__item:nth-child(n) {
+  width: 50%;
+}
+.table__content__line__item_color{
+  color: #07b3f5;
+  text-decoration-line: underline;
+}
+.search_style{
+  text-decoration-line: underline;
+  color: #1eaa70;
+}

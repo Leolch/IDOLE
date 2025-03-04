@@ -1,0 +1,104 @@
+
+<view class='pagecontainer' wx-if="{{!loginShow}}">
+<view class="topfix">
+  <view class="handContainer">
+    <view class="handplace">
+      <view class="handin handCode">
+        <text class="handlein">货号：</text>
+        <input 
+          placeholder="请输入货号"
+          placeholder-class="handplace"
+          class="inputclass"
+          confirm-type="search"
+          bindconfirm="handleSearch"
+          model:value="{{handleVal}}"
+          type="text"/>
+      </view>
+      <view class="handin">
+        <text class="handlein">色名：</text>
+        <input 
+          placeholder="请输入色名"
+          placeholder-class="handplace"
+          class="inputclass"
+          confirm-type="search"
+          bindconfirm="handleSearch"
+          model:value="{{handleColorVal}}"
+          type="text"/>
+      </view>
+    </view>
+    <button size="mini" type="default" class="mini-btn searchBtn" bind:tap="handleSearch">查询<icon class="icon-small searchIcon" type="search" size="15" color="green"></icon></button>
+  </view>
+  <view>
+    <!-- <button class="button" type="primary" bind:tap="handleScan">样衣扫码查询</button> -->
+  <view class="currentCode" wx:if="{{currentCode}}">
+    <text>货号: <text class="search_style" bind:tap="handleSearchList">{{handleVal}}</text></text>
+    <text wx-if="{{handleColorVal}}">色名: {{handleColorVal}}</text>
+  </view>
+   <view class="allCount">
+    <text class="countText">总库存量：{{allWh}}</text>
+    <text class="Searchcount">查询到{{searchCount|| 0}}条</text>
+   </view>
+  </view>
+
+</view>
+<view class='blockCon'>
+</view>
+<loading is-loading="{{isLoading}}">
+</loading>
+<view class="marginContainer">
+  
+  <!-- <view wx:if="{{detailObj.length}}" wx:for="{{detailObj}}" wx:key="index" class="detailContainer">
+    <view  class="detailres" >
+      <text class="detaiitem">总库存量：{{item['库存量']}}</text>
+      <text class="detaiitem">色号：{{item['颜色']}}</text>
+      <view class="detailNum">
+        <text class="detaiitemNum">第{{index+1}}条</text>
+      </view>
+    </view>
+  </view> -->
+  <view wx-if="{{codeAndClolorContainer}}" class="table__box">
+    <view class="table__scroll" style="height:100%;">
+      <scroll-view scroll-x class="table__scroll__view">
+        <view class="table__header">
+          <!-- <view class="table__header__item"></view> -->
+          <!-- <view class="table__header__item"></view> -->
+          <view class="table__header__item" wx:for="{{Rainfallheadtitle}}" wx:key="index">{{item.title}}</view>
+        </view>
+        <scroll-view class="table__content" scroll-y>
+          <view class="table__content__line" wx:for="{{RainfallItemdata}}" wx:key="index" wx:for-item="dataItem">
+            <view class="line_top">
+              <!-- <view class="table__content__line__item"></view> -->
+              <!-- <view class="table__content__line__item"></view> -->
+              <view class="table__content__line__item">{{dataItem['部门']}}</view>
+              <view class="table__content__line__item">{{dataItem['库存量']}}</view>
+              <view class="table__content__line__item">{{dataItem['仓库']}}</view>
+              <view class="table__content__line__item">{{dataItem['客户名称'] || ''}}</view>
+            </view>
+            <view wx-if="{{dataItem['备注']}}" class="line_bottom">备注：{{dataItem['备注']}}</view>
+          </view>
+        </scroll-view>
+      </scroll-view>
+    </view>
+  </view>
+  <view wx-if="{{codeContainer}}" class="table__box code_table_box">
+    <view class="table__scroll" style="height:100%;">
+      <scroll-view scroll-x class="table__scroll__view">
+        <view class="table__header">
+          <view class="table__header__item" wx:for="{{RainfallheadtitleCode}}" wx:key="index">{{item.title}}</view>
+        </view>
+        <scroll-view class="table__content" scroll-y>
+          <view class="table__content__line" wx:for="{{RainfallItemdataCode}}" wx:key="index" wx:for-item="dataItem">
+            <view class="line_top">
+              <view bind:tap="handleCodeAnd" data-codecolor="{{dataItem['色名']}}" class="table__content__line__item table__content__line__item_color">{{dataItem['色名']}}</view>
+              <view class="table__content__line__item">{{dataItem['库存量']}}</view>
+            </view>
+          </view>
+        </scroll-view>
+      </scroll-view>
+    </view>
+  </view>
+</view>
+</view>
+
+
+

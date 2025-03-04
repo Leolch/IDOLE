@@ -1,0 +1,11 @@
+{
+  "name": "yicai-miniprogram",
+  "version": "1.0.0",
+  "description": "登记挑样小程序",
+  "main": "app.js",
+  "dependencies": {
+    "lin-ui": "~0.9.4"
+  },
+  "author": "",
+  "license": "ISC"
+}

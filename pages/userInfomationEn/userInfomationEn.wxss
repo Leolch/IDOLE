@@ -1,0 +1,83 @@
+.l-form-btn-class{
+  display: flex;
+  justify-content: center;
+  margin-top: 40rpx;
+}
+.text, .picker, .l-input-class{
+  color: #dddddd;
+  font-size: 27rpx;
+}
+.l-label-class{
+  color: #eeeeee;
+  font-size: 27rpx;
+}
+.back_img{
+  height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+  /* background: url("https://img1.baidu.com/it/u=3891229835,1800191074&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1422"); */
+  /* background: url("https://cdn.nlark.com/yuque/0/2024/jpeg/531379/1722842425526-7371c2d4-aabe-4c80-ab1a-07dfcbcb0130.jpeg?x-oss-process=image%2Fformat%2Cwebp"); */
+  background: url("https://cdn.nlark.com/yuque/0/2024/jpeg/531379/1723009217926-71a4b71b-05b4-489d-b3c3-026e96ad908f.jpeg?x-oss-process=image%2Fformat%2Cwebp%2Finterlace%2C1");
+  background-size: 100vw 100vh;
+  padding-top: 30rpx;
+}
+.English{
+  position: fixed;
+  bottom: 40rpx;
+  right: 40rpx;
+  border-radius: 50%;
+  border: 5rpx solid #529578;
+  color:#529578;
+  font-weight: bold;
+  background-color: rgb(226, 230, 238);
+  text-align: center;
+  width: 60rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  /* font-size: small; */
+  opacity: 0.7;
+  animation: rotate 4s infinite linear;
+}
+@keyframes rotate {
+  0% {transform: rotate(0);}
+  100% {transform: rotate(360deg);}
+}
+.line{
+  background-color: #529578;
+  height: 4rpx;
+  width: 100%;
+}
+.sub{
+  color: #30655f;
+  font-weight: bold;
+}
+.container{
+  box-sizing: border-box;
+  border: 9rpx solid #529578;
+  border-radius: 10rpx;
+}
+.border_w{
+  border: 4rpx solid #eee;
+  border-radius: 12rpx;
+  box-sizing: border-box;
+  margin: 0 auto;
+  width: 92%;
+}
+.border_n{
+  box-sizing: border-box;
+  border: 4rpx solid #eee;
+  width: 100%;
+  border-radius: 5rpx;
+}
+.place{
+  text-align: center;
+  color: #eee;
+  padding-bottom: 30rpx;
+  font-weight: bold;
+}
+.l-label-class .l-class{
+  border: 5rpx solid #000000 !important;
+}
+.l-btn{
+  border: 25rpx solid #000000 !important;
+}

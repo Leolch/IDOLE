@@ -1,0 +1,68 @@
+<view class="back_img">
+<view class="place">{{exhibitionPlace}}</view>
+  <view class="border_w">
+    <view class="container">
+      <view class="border_n">
+        <l-form name="userInfo" l-form-btn-class="l-form-btn-class" bind:linsubmit="submit">
+            <l-form-item label="姓名：" l-form-row-class="l-row-class" name="userName" rules="{{userInfo.nameRules}}" l-form-label-class="l-label-class">
+                <l-input id="userName" l-input-class="l-input-class" bind:lininput="nameChange" value="{{userName}}" hide-label show-row="{{false}}"/>
+            </l-form-item>
+            <view class="line"></view>
+            <l-form-item l-form-label-class="l-label-class" rules="{{userInfo.companyNameRules}}" label="公司名称：" name="companyName">
+                <l-input id="companyName" bind:lininput="companyChange" l-input-class="l-input-class" value="{{companyName}}" hide-label show-row="{{false}}"/>
+            </l-form-item>
+            <view class="line"></view>
+            <l-form-item l-form-label-class="l-label-class" label="国家：" name="country" rules="{{userInfo.country}}">
+              <l-radio-group none-checked="{{false}}" current="{{country}}" id="country" placement="row" bind:linchange="radioChange">
+                  <l-radio select-color="#ddd" key="china">
+                      <view class="text">中国</view>
+                  </l-radio>
+                  <l-radio select-color="#ddd" key="other">
+                    <view class="text">其他</view>
+                  </l-radio>
+              </l-radio-group>
+            </l-form-item>
+            <view class="line"></view>
+            <l-form-item l-form-label-class="l-label-class" wx:if="{{country==='other'}}" rules="{{userInfo.countryName}}" label=" " name="countryName">
+              <l-input id="countryName" l-input-class="l-input-class" bind:lininput="countryNameChange" placeholder="请填写国家名" value="{{countryName}}" hide-label show-row="{{false}}"/>
+            </l-form-item>
+            <l-form-item l-form-label-class="l-label-class" label="地区(中国必填)：" name="region">
+              <view class="section">
+                <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
+                  <view class="picker">
+                    {{region[0] || '请选择省'}}-{{region[1] || '市'}}-{{region[2] || '区'}}
+                  </view>
+                </picker>
+              </view>
+            </l-form-item>
+            <view class="line"></view>
+            <l-form-item l-form-label-class="l-label-class" rules="{{userInfo.businessTypeRules}}" label="业务类型：：" name="multiIndex">
+              <view class="section">
+                <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
+                  <view class="picker">
+                    {{multiArray[0][multiIndex[0]]}}{{multiArray[0][multiIndex[0]] === '其他'? '': '-'}}{{multiArray[1][multiIndex[1]]}}
+                  </view>
+                </picker>
+              </view>
+            </l-form-item>
+            <view class="line"></view>
+            <l-form-item wx:if="{{multiArray[0][multiIndex[0]] === '其他'}}" label=" " rules="{{userInfo.businessOhtherRules}}" name="businessOther">
+              <l-input id="businessOther" l-input-class="l-input-class" bind:lininput="businessOtherChange" placeholder="请填写业务类型" value="{{businessOther}}" hide-label show-row="{{false}}" clear="{{true}}"/>
+            </l-form-item>
+            <view class="l-form-btn-class">
+                <l-button type="success" bind:lintap="submit" plain> <view class="sub">提交</view></l-button>
+            </view>
+        </l-form>
+      </view>
+    </view>
+  </view>
+  <l-toast
+    show="{{toastShow}}"
+    title="{{toastTitle}}"
+  />
+  <view class="English" bind:tap="handleTranslate">
+    EN
+  </view>
+<loginmodelback is-show="{{isLoading}}" bindgetphone="getPhone"></loginmodelback>
+<loading is-loading="{{loading}}"></loading>
+</view>

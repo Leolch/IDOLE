@@ -1,0 +1,40 @@
+.loginBtn{
+  /* vertical-align: middle; */
+  top: 37%;
+  position: fixed;
+  left: 50%;
+  margin-left: -93rpx;
+  z-index: 9;
+}
+/* pages/welcomPage/index.wxss */
+.loadingContainer{
+  position: absolute;
+  top:0;
+  left:0;
+  bottom:0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  /* padding: 20rpx 30rpx; */
+  /* background: url("https://wx3.sinaimg.cn/mw690/005UJ76vly1h3yjw3ej6jj30yi22ote1.jpg"); */
+  /* background: url("https://cdn.nlark.com/yuque/0/2024/png/531379/1722503778970-6270bf2a-a0b6-4d96-9b4a-8adc23adcfe7.png?x-oss-process=image%2Fformat%2Cwebp%2Fresize%2Cw_750%2Climit_0"); */
+  /* background: url("https://img1.tuguaishou.com/ips_templ_preview/st_20220415/16/50/33/56/58/01/lg_400_0.png?auth_key=2283696000-0-0-cc8d2072122c7815fb3e94f965a890c1"); */
+  /* background: url("https://cdn.nlark.com/yuque/0/2024/jpeg/531379/1723009217926-71a4b71b-05b4-489d-b3c3-026e96ad908f.jpeg?x-oss-process=image%2Fformat%2Cwebp%2Finterlace%2C1%2Fresize%2Cw_750%2Climit_0"); */
+  background-size: 100vw 100vh;
+  z-index: 9999;
+}
+.back_img{
+  height: 100%;
+  width: 100%;
+  /* background: url("https://img2.baidu.com/it/u=1013121035,524285170&fm=253&fmt=auto?w=500&h=889"); */
+  background-size: 100vw 100vh;
+  box-shadow: 10rpx;
+  border-radius: 10rpx;
+}
+.video{
+  width: 100%;
+  height: 100%;
+  /* border-radius: 20rpx; */
+  /* opacity: 0.7; */
+}

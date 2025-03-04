@@ -1,0 +1,12 @@
+{
+  "usingComponents": {
+    "l-dialog": "lin-ui/dialog/index",
+    "l-button": "lin-ui/button/index",
+    "l-toast": "lin-ui/toast/index",
+    "l-input": "lin-ui/input/index",
+    "l-icon": "lin-ui/icon/index",
+    "l-slide-view": "lin-ui/slide-view/index",
+    "loading": "../component/loading/loading"
+  },
+  "navigationBarTitleText": "SICILY挑样"
+}

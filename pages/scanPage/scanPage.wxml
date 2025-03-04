@@ -1,0 +1,84 @@
+<!--pages/scanPage/index.wxml-->
+<view class="back">
+  <l-input wx:if="{{isProxy}}" label="代扫人：" label-width="120" placeholder="请输入代扫人姓名" bind:lininput="handleProxyIn" />
+  <view class="content">
+    <view class="detail">
+      <l-slide-view wx:if="{{scanDetailArr.length}}" wx:for="{{scanDetailArr}}" auto-close="true" wx:key="index" height="160" width="750" slide-width="140" bind:lintap="handleDelete" data-code="{{item['客户原始查询编号/货号'] || ''}}">
+        <view slot="left" class="left">
+          <view class='left-con'>
+            <text class='left-title'>克重: {{item["平方米重"] || ''}}</text>
+            <text class='left-title'>{{item.color ? "颜色："+item.color : '幅宽：' + item["全幅宽"] || ''}}</text>
+            <text class='left-title last'>成分:{{item["成份"] || ''}}</text>
+          </view> 
+          <view class='left-code'>
+            <text class="l-t">{{item['客户原始查询编号/货号']}}</text>
+            <text class="s-type">{{"来源："+item.sourceType||''}}</text>
+            <text class="s-type s-i">{{item.latest ? '扫码结果' : ''}}</text>
+          </view>
+        </view>
+        <view slot="right" class="right">
+          <text class="delete">删除</text>
+        </view>
+      </l-slide-view>
+      <view wx:if="{{!scanDetailArr.length}}" class="n-c">
+        暂无数据，请扫码添加
+      </view>
+      <view class="d-c"></view>
+    </view>
+  </view>
+  <view class="c-container">
+    <view class="c-bottom c-b-t">
+      <view class="btn-t">
+        <!-- <l-button bg-color="#eff7ff" plain="{{true}}" shape="square" size="long" bind:lintap="handleSub"><l-icon name="order"/> <text class="scan">提交</text></l-button> -->
+        <l-button l-class="c-btn-r c-btn-r-l" shape="square" size="mini" bind:lintap="handleToDscan"><l-icon color="#fff" name="phone"/><text class="scan">代扫:{{isProxy?"是":"否"}}</text></l-button>
+        <l-button l-class="c-btn-r c-btn-r-r" shape="square" size="mini" bind:lintap="handleSetting"><l-icon color="#fff" name="setting"/><text class="scan">{{isDan ? '单扫':"连扫"}}模式</text></l-button>
+      </view>
+     
+      <view class="c-btn-t">
+         <view class="center-t"></view>
+      </view>
+      <view class="btn-t">
+        <!-- <l-button bg-color="#6c8dff" plain="{{true}}" shape="square" size="long" bind:lintap="handleScan"><l-icon name="scan"/> <text class="scan">扫一扫</text></l-button> -->
+        <l-button l-class="c-btn-l" shape="square" size="long" bind:lintap="handleToMine"><l-icon color="#fff" name="user"/><text class="scan">我的</text></l-button>
+      </view>
+    </view>
+    <view class="c-bottom">
+      <view class="btn">
+        <!-- <l-button bg-color="#6c8dff" plain="{{true}}" shape="square" size="long" bind:lintap="handleScan"><l-icon name="scan"/> <text class="scan">扫一扫</text></l-button> -->
+        <l-button l-class="c-btn-l" shape="square" size="long" bind:lintap="handleClear"><l-icon color="#fff" name="delete"/><text class="scan">清空</text></l-button>
+      </view>
+      <view class="c-btn">
+          <view class="c-btn-b" bind:tap="handleScan"> <l-icon l-class="l-delete" color="#fff" name="scan"/></view>
+      </view>
+      <view class="btn">
+        <!-- <l-button bg-color="#eff7ff" plain="{{true}}" shape="square" size="long" bind:lintap="handleSub"><l-icon name="order"/> <text class="scan">提交</text></l-button> -->
+        <l-button l-class="c-btn-r" shape="square" size="long" bind:lintap="handleSub"><l-icon color="#fff" name="order"/><text class="scan">提交</text></l-button>
+      </view>
+    </view>
+    <view class="yc-b"><view class="fengche"></view><text class="b-c">SICILY-VIP</text></view>
+  </view>
+  <l-toast
+    show="{{toastShow}}"
+    title="{{toastTitle}}"
+  />
+  <!-- 无标题确认框 -->
+  <l-dialog 
+  show="{{dialogShow}}"
+  type="confirm"     
+  title="提示"
+  content="{{message}}"
+  bind:linconfirm="handleConfirm"
+  bind:lincancel="handleCancel"
+   />
+   <l-dialog 
+  show="{{clearDialogShow}}"
+  type="confirm"     
+  title="提示"
+  content="确定清除全部扫样？"
+  bind:linconfirm="handleClearConfirm"
+  bind:lincancel="handleClearCancel"
+   />
+</view>
+<loading is-loading="{{isLoading}}">
+</loading>
+
