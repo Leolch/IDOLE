@@ -1,0 +1,5 @@
+# 忽略微信小程序配置文件
+project.config.json
+
+# 忽略npm依赖包目录
+miniprogram_npm/
