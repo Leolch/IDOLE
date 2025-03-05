@@ -55,7 +55,12 @@ App({
    * 当小程序从前台进入后台，会触发 onHide
    */
   onHide: function () {
-    
+    const pages = getCurrentPages();
+    const currentPage = pages[pages.length - 1];
+    // 只在scanPage页面时缓存scanDetailArr数据
+    if (currentPage && currentPage.route === 'pages/scanPage/scanPage' && currentPage.data && currentPage.data.scanDetailArr && currentPage.data.scanDetailArr.length > 0) {
+      wx.setStorageSync('scanDetailArr', currentPage.data.scanDetailArr);
+    }
   },
 
   /**

@@ -18,7 +18,8 @@ Page({
     buttonY: 100,  // 初始位置，距离顶部的 100px
     isDan: true,
     isProxy: false,
-    proxyContent: ''
+    proxyContent: '',
+    storageArrData: []
   },
   handleSetting(){
     this.setData({
@@ -55,70 +56,38 @@ handleScan() {
 
   wx.scanCode({
     success (res) {
-      that.handleScanSuccess(res, scanInterval);
-    },
-    fail() {
-      that.setData({
-        toastShow: true,
-        toastTitle: '扫码失败，请重试！'
-      });
+      const pageUrl = decodeURIComponent(res.result);
+      
+      // 检查扫码结果是否包含 itemCode
+      if (pageUrl.indexOf('itemCode=') < 0) {
+        that.setData({
+          toastShow: true,
+          toastTitle: '扫码有误，请重试！'
+        });
+        return false;
+      }
+
+      const urlString = pageUrl.split('itemCode=')[1].split('#')[0];
+      
+      // 调用 getDetail 获取物品详细信息
+      if(that.data.isDan){
+        that.getDetail(urlString || '');
+      } else {
+        that.getDetail(urlString || '').then(() => {
+          // 等待指定时间后继续扫码
+          setTimeout(() => {
+            that.handleScan();  // 延迟后继续扫码
+          }, scanInterval);
+        }).catch(() => {
+          that.setData({
+            toastShow: true,
+            toastTitle: '获取数据失败，请稍后重试！'
+          });
+        });
+      }
+      
     }
   });
-},
-
-// 处理扫码成功的逻辑
-handleScanSuccess(res, scanInterval) {
-  const pageUrl = decodeURIComponent(res.result);
-  
-  if (!this.validateScanResult(pageUrl)) {
-    return;
-  }
-
-  const urlString = this.extractItemCode(pageUrl);
-  
-  if (this.data.isDan) {
-    this.handleSingleScan(urlString);
-  } else {
-    this.handleContinuousScan(urlString, scanInterval);
-  }
-},
-
-// 验证扫码结果
-validateScanResult(pageUrl) {
-  if (pageUrl.indexOf('itemCode=') < 0) {
-    this.setData({
-      toastShow: true,
-      toastTitle: '扫码有误，请重试！'
-    });
-    return false;
-  }
-  return true;
-},
-
-// 提取itemCode
-extractItemCode(pageUrl) {
-  return pageUrl.split('itemCode=')[1].split('#')[0] || '';
-},
-
-// 处理单扫模式
-handleSingleScan(itemCode) {
-  this.getDetail(itemCode);
-},
-
-// 处理连扫模式
-handleContinuousScan(itemCode, scanInterval) {
-  this.getDetail(itemCode)
-    .then(() => {
-      setTimeout(() => {
-        this.handleScan();  // 延迟后继续扫码
-      }, scanInterval);
-    })
-    .catch(() => {
-      this.setData({
-        toastShow: true,
-        toastTitle: '获取数据失败，请稍后重试！'
-      });
-    });
 },
 handleClear(){
   if(this.data.scanDetailArr.length){
@@ -131,6 +100,7 @@ handleClearConfirm(){
   this.setData({
     scanDetailArr: []
   })
+  wx.removeStorageSync('scanDetailArr')
 },
 handleClearCancel(){
   this.setData({
@@ -185,9 +155,15 @@ getDetail(code) {
                   return item;
                 });
               }
+            } else {
+              that.setData({
+                toastShow: true,
+                toastTitle: '此吊牌信息为空，请联系工作人员！'
+              });
+              return false;
             }
 
-            scanDetailArr = result.length ? [...result, ...scanDetailArr] : result;
+            scanDetailArr = result.length ? [...result, ...scanDetailArr] : scanDetailArr;
             that.setData({
               scanDetailArr
             });
@@ -264,6 +240,7 @@ getDetail(code) {
             toastTitle: '提交成功！',
             scanDetailArr: []
           })
+          wx.removeStorageSync('scanDetailArr')
         } else {
           this.setData({
             toastShow: true,
@@ -284,7 +261,29 @@ getDetail(code) {
     this.setData({
       wxPhone
     })
-    itemCode && this.getDetail(itemCode);
+    // 检查本地存储中是否有缓存的scanDetailArr数据
+    const storageArr = wx.getStorageSync('scanDetailArr') || [];
+    if (storageArr.length > 0) {
+      this.setData({
+        scanDetailArr: storageArr
+      })
+    }
     
+    // 如果有itemCode，获取新数据并添加到现有数据中
+    if (itemCode) {
+      this.getDetail(itemCode);
+    }
   },
+  // 监听页面隐藏时缓存数据
+  onHide() {
+    if (this.data.scanDetailArr.length > 0) {
+      wx.setStorageSync('scanDetailArr', this.data.scanDetailArr)
+    }
+  },
+  // 监听页面卸载时缓存数据
+  onUnload() {
+    if (this.data.scanDetailArr.length > 0) {
+      wx.setStorageSync('scanDetailArr', this.data.scanDetailArr)
+    }
+  }
 })
