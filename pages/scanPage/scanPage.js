@@ -1,9 +1,7 @@
 // pages/scanPage/index.js
-import { requestUrls } from '../component/requestUrl'
+import { requestUrls, requestUtil } from '../component/requestUrl'
+
 Page({
-  /**
-   * 页面的初始数据
-   */
   data: {
     scanDetailArr: [],
     toastShow: false,
@@ -15,253 +13,267 @@ Page({
     wxPhone: '',
     clearDialogShow: false,
     touchStartY: 0,
-    buttonY: 100,  // 初始位置，距离顶部的 100px
+    buttonY: 100,
     isDan: true,
     isProxy: false,
     proxyContent: '',
     storageArrData: []
   },
-  handleSetting(){
+
+  handleSetting() {
     this.setData({
       isDan: !this.data.isDan
     })
   },
-  handleToMine(){
+
+  handleToMine() {
     wx.navigateTo({
       url: `../scanPageList/scanPageList?wxPhone=${this.data.wxPhone}`
     })
   },
-  handleDelete(e){
-    let filterDetail = this.data.scanDetailArr.filter(item => {
-      return item["客户原始查询编号/货号"] !== e.currentTarget.dataset.code
-    })
+
+  handleDelete(e) {
+    const filterDetail = this.data.scanDetailArr.filter(item => 
+      item["客户原始查询编号/货号"] !== e.currentTarget.dataset.code
+    )
     this.setData({
       scanDetailArr: filterDetail,
     })
-    console.log('e',e)
   },
-  handleToDscan(){
+
+  handleToDscan() {
     this.setData({
       isProxy: !this.data.isProxy
     })
   },
-  handleProxyIn(e){
+
+  handleProxyIn(e) {
     this.setData({
       proxyContent: e.detail.value
     })
   },
-handleScan() {
-  let that = this;
-  const scanInterval = 900;  // 设置扫码间隔时间，单位：毫秒
 
-  wx.scanCode({
-    success (res) {
-      const pageUrl = decodeURIComponent(res.result);
-      
-      // 检查扫码结果是否包含 itemCode
-      if (pageUrl.indexOf('itemCode=') < 0) {
-        that.setData({
-          toastShow: true,
-          toastTitle: '扫码有误，请重试！'
-        });
-        return false;
-      }
+  handleScan() {
+    const that = this;
+    const scanInterval = 900;
 
-      const urlString = pageUrl.split('itemCode=')[1].split('#')[0];
-      
-      // 调用 getDetail 获取物品详细信息
-      if(that.data.isDan){
-        that.getDetail(urlString || '');
-      } else {
-        that.getDetail(urlString || '').then(() => {
-          // 等待指定时间后继续扫码
-          setTimeout(() => {
-            that.handleScan();  // 延迟后继续扫码
-          }, scanInterval);
-        }).catch(() => {
+    wx.scanCode({
+      success(res) {
+        try {
+          const pageUrl = decodeURIComponent(res.result);
+          
+          if (pageUrl.indexOf('itemCode=') < 0) {
+            that.setData({
+              toastShow: true,
+              toastTitle: '扫码有误，请重试！'
+            });
+            return;
+          }
+
+          const urlString = pageUrl.split('itemCode=')[1].split('#')[0];
+          
+          if (that.data.isDan) {
+            that.getDetail(urlString || '');
+          } else {
+            that.getDetail(urlString || '')
+              .then(() => {
+                setTimeout(() => {
+                  that.handleScan();
+                }, scanInterval);
+              })
+              .catch(() => {
+                that.setData({
+                  toastShow: true,
+                  toastTitle: '获取数据失败，请稍后重试！'
+                });
+              });
+          }
+        } catch (error) {
+          console.error('扫码处理错误:', error);
           that.setData({
             toastShow: true,
-            toastTitle: '获取数据失败，请稍后重试！'
+            toastTitle: '扫码处理异常，请重试！'
           });
+        }
+      },
+      fail(error) {
+        console.error('扫码失败:', error);
+        that.setData({
+          toastShow: true,
+          toastTitle: '扫码失败，请重试！'
         });
       }
-      
+    });
+  },
+
+  handleClear() {
+    if (this.data.scanDetailArr.length) {
+      this.setData({
+        clearDialogShow: true
+      })
     }
-  });
-},
-handleClear(){
-  if(this.data.scanDetailArr.length){
+  },
+
+  handleClearConfirm() {
     this.setData({
-      clearDialogShow: true
+      scanDetailArr: []
     })
-  }
-},
-handleClearConfirm(){
-  this.setData({
-    scanDetailArr: []
-  })
-  wx.removeStorageSync('scanDetailArr')
-},
-handleClearCancel(){
-  this.setData({
-    clearDialogShow: false
-  })
-},
-// 获取物品详情函数
-getDetail(code) {
+    wx.removeStorageSync('scanDetailArr')
+  },
+
+  handleClearCancel() {
+    this.setData({
+      clearDialogShow: false
+    })
+  },
+
+  getDetail(code) {
     const that = this;
     return new Promise((resolve, reject) => {
       that.setData({
         isLoading: true
       });
-      wx.request({
-        url: requestUrls.getMainDataByItemCode,
+
+      requestUtil(requestUrls.getMainDataByItemCode, {
         method: 'GET',
         data: {
           ItemCode: code,
           username: 'admin'
-        },
-        success: (res) => {
+        }
+      })
+        .then(res => {
           that.setData({
             isLoading: false
           });
-          if (res.data.success) {
-            let scanDetailArr = that.data.scanDetailArr || [];
-            let result = res.data.result || [];
-            if (result && result.length) {
-              if (that.data.scanDetailArr.length) {
-                let filterArr = that.data.scanDetailArr.filter(item => {
-                  return item["客户原始查询编号/货号"] === code;
-                });
-                if (filterArr.length) {
-                  that.setData({
-                    toastShow: true,
-                    toastTitle: `样品${code}已在当前列表中！`
-                  });
-                  resolve();  // 请求成功，继续执行
-                  return;
-                }
-              }
-              result = result.map(item => {
-                return {
-                  ...item,
-                  latest: true
-                };
-              });
 
-              if (scanDetailArr.length) {
-                scanDetailArr = scanDetailArr.map(item => {
-                  item.latest = false;
-                  return item;
+          let scanDetailArr = that.data.scanDetailArr || [];
+          let result = res.result || [];
+
+          if (result && result.length) {
+            if (that.data.scanDetailArr.length) {
+              const filterArr = that.data.scanDetailArr.filter(item => 
+                item["客户原始查询编号/货号"] === code
+              );
+              if (filterArr.length) {
+                that.setData({
+                  toastShow: true,
+                  toastTitle: `样品${code}已在当前列表中！`
                 });
+                resolve();
+                return;
               }
-            } else {
-              that.setData({
-                toastShow: true,
-                toastTitle: '此吊牌信息为空，请联系工作人员！'
-              });
-              return false;
             }
 
-            scanDetailArr = result.length ? [...result, ...scanDetailArr] : scanDetailArr;
-            that.setData({
-              scanDetailArr
-            });
+            result = result.map(item => ({
+              ...item,
+              latest: true
+            }));
 
-            console.log(that.data.scanDetailArr);
-            resolve();  // 请求完成，继续执行
+            if (scanDetailArr.length) {
+              scanDetailArr = scanDetailArr.map(item => ({
+                ...item,
+                latest: false
+              }));
+            }
           } else {
             that.setData({
               toastShow: true,
-              toastTitle: '扫码有误，请重试！'
+              toastTitle: '此吊牌信息为空，请联系工作人员！'
             });
-            reject();  // 请求失败
+            reject();
+            return;
           }
-        },
-        error: () => {
+
+          scanDetailArr = result.length ? [...result, ...scanDetailArr] : scanDetailArr;
+          that.setData({ scanDetailArr });
+          resolve();
+        })
+        .catch(error => {
+          console.error('获取详情失败:', error);
           that.setData({
-            isLoading: false
+            isLoading: false,
+            toastShow: true,
+            toastTitle: '获取详情失败，请重试！'
           });
-          reject();  // 请求失败
-        }
-      });
+          reject(error);
+        });
     });
   },
-  handleSub(){
-    if(!this.data.scanDetailArr.length) {
+
+  handleSub() {
+    if (!this.data.scanDetailArr.length) {
       this.setData({
         toastShow: true,
         toastTitle: '当前无样品，请扫码！'
       })
-      return false;
-    } else if(this.data.isProxy && !this.data.proxyContent){
+      return;
+    }
+    
+    if (this.data.isProxy && !this.data.proxyContent) {
       this.setData({
         toastShow: true,
         toastTitle: '请输入代扫信息！'
       })
-      return false;
-    } 
+      return;
+    }
+
     this.setData({
       dialogShow: true
     })
   },
-  handleConfirm(){
-    let dataList = [];
+
+  handleConfirm() {
     const { wxPhone = '', isProxy = false, proxyContent = '' } = this.data;
-    console.log('this.data.scanDetailArr',this.data.scanDetailArr)
-    dataList = this.data.scanDetailArr.map(item => {
-      return {
-        cardName: item["供应商全称"] || '',
-        cardCode: item["首选供应商编号"] || '',
-        productType: item['布种类型'] || '',
-        sourceType: item.sourceType || '',
-        colorC: item.colorC || '',
-        color: item.color || '' ,
-        itemCodeConnection: item["货号"] || '',
-        itemCodeSearch: item["客户原始查询编号/货号"] || '',
-        kz: item["平方米重"] || '',
-        kf: item["全幅宽"] || '',
-        cf: item["成份"] || ''
-      };
-    })
-    wx.request({
-      url: requestUrls.addConnectionMsg,
+    const dataList = this.data.scanDetailArr.map(item => ({
+      cardName: item["供应商全称"] || '',
+      cardCode: item["首选供应商编号"] || '',
+      productType: item['布种类型'] || '',
+      sourceType: item.sourceType || '',
+      colorC: item.colorC || '',
+      color: item.color || '',
+      itemCodeConnection: item["货号"] || '',
+      itemCodeSearch: item["客户原始查询编号/货号"] || '',
+      kz: item["平方米重"] || '',
+      kf: item["全幅宽"] || '',
+      cf: item["成份"] || ''
+    }));
+
+    requestUtil(requestUrls.addConnectionMsg, {
       method: 'POST',
-      data: { 
-        wxPhone: wxPhone,
+      data: {
+        wxPhone,
         formList: dataList,
         proxyContent: isProxy ? proxyContent : '',
-        isProxy: isProxy ? "是":"否",
-      },
-      success: res=> {
-        if(res.data.success){
-          this.setData({
-            toastShow: true,
-            toastTitle: '提交成功！',
-            scanDetailArr: []
-          })
-          wx.removeStorageSync('scanDetailArr')
-        } else {
-          this.setData({
-            toastShow: true,
-            toastTitle: res.data.message || '网络有误，请重试！'
-          })
-        }
+        isProxy: isProxy ? "是" : "否"
       }
     })
+      .then(() => {
+        this.setData({
+          toastShow: true,
+          toastTitle: '提交成功！',
+          scanDetailArr: []
+        });
+        wx.removeStorageSync('scanDetailArr');
+      })
+      .catch(error => {
+        console.error('提交失败:', error);
+        this.setData({
+          toastShow: true,
+          toastTitle: error.message || '网络有误，请重试！'
+        });
+      });
   },
-  handleCancel(){
+
+  handleCancel() {
     this.setData({
       dialogShow: false
     })
   },
-  onLoad(options){
+
+  onLoad(options) {
     const { wxPhone = '', itemCode = '' } = options;
-    console.log(wxPhone, itemCode)
-    this.setData({
-      wxPhone
-    })
-    // 检查本地存储中是否有缓存的scanDetailArr数据
+    this.setData({ wxPhone });
+
     const storageArr = wx.getStorageSync('scanDetailArr') || [];
     if (storageArr.length > 0) {
       this.setData({
@@ -269,21 +281,20 @@ getDetail(code) {
       })
     }
     
-    // 如果有itemCode，获取新数据并添加到现有数据中
     if (itemCode) {
       this.getDetail(itemCode);
     }
   },
-  // 监听页面隐藏时缓存数据
+
   onHide() {
     if (this.data.scanDetailArr.length > 0) {
       wx.setStorageSync('scanDetailArr', this.data.scanDetailArr)
     }
   },
-  // 监听页面卸载时缓存数据
+
   onUnload() {
     if (this.data.scanDetailArr.length > 0) {
       wx.setStorageSync('scanDetailArr', this.data.scanDetailArr)
     }
   }
-})
+});

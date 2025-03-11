@@ -1,57 +1,51 @@
-// index.js
-
-
-// 获取应用实例
-const app = getApp()
-import { url } from 'inspector';
-import { requestUrls } from '../component/requestUrl'
+import { requestUrls, requestUtil } from '../component/requestUrl'
 
 Page({
   data: {
-    text:'',
-    handleVal:'',
-    handleColorVal:'',
-    detailObj: [],
     currentCode: '',
-    isLoading: '',
-    currentUserPhone: '',
-    allWh: 60,
-    Rainfallheadtitle: [
-      { title: "部门" },
-      { title: "库存量" },
-      { title: "仓库" },
-      { title: "客户名称" },
-    ],
-    RainfallheadtitleCode: [
-      { title: "色名" },
-      { title: "库存量" },
-    ],
-    RainfallItemdata: [],
-    RainfallItemdataCode: [],
-    codeContainer: false,
-    codeAndClolorContainer:false,
-    searchCount: 0
+    detailObj: [],
+    toastShow: false,
+    toastTitle: '提示',
+    isLoading: false
   },
-  handleScan(){
-    let that = this;
+  handleScan() {
+    const that = this;
     wx.scanCode({
-      success (res) {
-        const pageUrl = decodeURIComponent(res.result);
-        if(pageUrl.indexOf('itemcode=') < 0 || pageUrl.indexOf('proc=') < 0) {
+      success(res) {
+        try {
+          const pageUrl = decodeURIComponent(res.result);
+          if (pageUrl.indexOf('itemcode=') < 0 || pageUrl.indexOf('proc=') < 0) {
+            wx.showToast({
+              title: '扫码有误',
+              icon: 'none',
+              duration: 2000
+            });
+            return;
+          }
+
+          const urlString = pageUrl.split('itemcode=')[1];
+          that.setData({
+            currentCode: urlString
+          });
+          that.getDetail(urlString || '');
+        } catch (error) {
+          console.error('扫码处理错误:', error);
           wx.showToast({
-            title: '扫码有误',
-            icon: 'fail',
+            title: '扫码处理异常，请重试',
+            icon: 'none',
             duration: 2000
-          })
-          return false;
+          });
         }
-        const urlString = pageUrl.split('itemcode=')[1];
-        that.setData({
-          currentCode: urlString
-        })
-        that.getDetail(urlString || '');
+      },
+      fail(error) {
+        console.error('扫码失败:', error);
+        wx.showToast({
+          title: '扫码失败，请重试',
+          icon: 'none',
+          duration: 2000
+        });
       }
-    })
+    });
   },
   handleSearchList(){
     // 点击货号时查询列表 清空色名
@@ -82,106 +76,33 @@ Page({
     })
     this.getDetail(this.data.handleVal, this.data.handleColorVal)
   },
-  getDetail(code, color){
+  getDetail(code) {
     const that = this;
-    if(!code) return;
-    wx.showLoading({
-      title: '加载中',
-    })
-    this.setData({
+    that.setData({
       isLoading: true
-    }) 
-    wx.hideLoading()
-    if(code && color){
-      this.setData({
-        RainfallItemdata: [],
-        searchCount: '',
-        allWh: ''
+    });
+
+    requestUtil(requestUrls.getMainDataByItemCode, {
+      method: 'GET',
+      data: {
+        ItemCode: code,
+        username: 'admin'
+      }
+    })
+      .then(res => {
+        that.setData({
+          isLoading: false,
+          detailObj: res.result || []
+        });
       })
-      wx.request({
-        url: requestUrls.getItemExistInfos,
-        // header: {
-        //   Cookie: wx.getStorageSync('cookie') || ''
-        // },
-        data:{
-          itemCode: code,
-          color,
-        },
-        method: 'POST',
-        success:(res)=>{
-          console.log(res);
-          if(res.data.result && Object.keys(res.data.result).length){
-            const countArr = res.data.result.data.map(item => {
-              return item['库存量']
-            })
-            let allWh = that.sumFn(countArr).toFixed(4);
-            res.data.result.data.sort((a,b)=>{return b['库存量'] - a['库存量']})
-            this.setData({
-              RainfallItemdata: res.data.result.data.length ? res.data.result.data : [],
-              searchCount: res.data.result.data.length,
-              allWh
-            })
-          }
-          
-          this.setData({
-            isLoading: false
-          })
-        },
-        fail:(err)=>{
-          wx.showToast({
-            title: '查询失败',
-            icon: 'error'
-          })
-        },
-        complete:()=>{
-          wx.hideLoading()
-        }
-      })
-    } else if(code && !color){
-      this.setData({
-        RainfallItemdataCode: [],
-        searchCount: '',
-        allWh: ''
-      })
-      wx.request({
-        url: requestUrls.getItemExistInfos,
-        // header: {
-        //   Cookie: wx.getStorageSync('cookie') || ''
-        // },
-        method: "POST",
-        data:{
-          itemCode: code,
-        },
-        success:(res)=>{
-          console.log(res);
-          if(res.data.result && Object.keys(res.data.result).length){
-            const countArr = res.data.result.data.map(item => {
-              return item['库存量']
-            })
-            let allWh = that.sumFn(countArr).toFixed(4);
-            res.data.result.data.sort((a,b)=>{return b['库存量'] - a['库存量']})
-            this.setData({
-              RainfallItemdataCode: res.data.result.data.length ? res.data.result.data : [],
-              searchCount: res.data.result.data.length,
-              allWh
-            })
-          }
-          this.setData({
-            isLoading: false
-          })
-        },
-        fail:(err)=>{
-          wx.showToast({
-            title: '查询失败',
-            icon: 'error'
-          })
-        },
-        complete:()=>{
-          wx.hideLoading()
-        }
-      })
-    }
-  },
+      .catch(error => {
+        console.error('获取详情失败:', error);
+        that.setData({
+          isLoading: false,
+          toastShow: true,
+          toastTitle: '获取详情失败，请重试！'
+        });
+      });
   sumFn(arr){
     var s = 0;
     arr.forEach((val, idx)=> {
@@ -201,25 +122,13 @@ Page({
       this.getDetail(this.data.handleVal, this.data.handleColorVal)
     }
   },
-  onLoad(option){
-    // 初始化
-    console.log('option',option)
-    this.setData({
-      allWh: ''
-    })
-    if(option && option.itemcode){
-      let itemcode = JSON.parse(option.itemcode);
+  onLoad(options) {
+    const { itemCode = '' } = options;
+    if (itemCode) {
       this.setData({
-        text: itemcode,
-        currentCode: itemcode,
-        handleVal: itemcode
-      })
-      if(itemcode) {
-        this.setData({
-          codeContainer: true,
-        })
-        this.getDetail(itemcode)
-      }
+        currentCode: itemCode
+      });
+      this.getDetail(itemCode);
     }
   }
 })
