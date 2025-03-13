@@ -1,4 +1,13 @@
+/*
+ * @Author: 西西里的夏天 oncwnuKlEKwqguMTrBayg-NnQvvs@git.weixin.qq.com
+ * @Date: 2025-03-04 16:04:13
+ * @LastEditors: 西西里的夏天 oncwnuKlEKwqguMTrBayg-NnQvvs@git.weixin.qq.com
+ * @LastEditTime: 2025-03-13 14:41:22
+ * @FilePath: \益彩小程序\app.js
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import compV from "./utils/util"
+import analytics from "./utils/analytics"
 
 const handleRequestError = (error) => {
   console.error('请求错误:', error);
@@ -22,6 +31,13 @@ App({
 
   },
   onLaunch: function () {
+    // 初始化自动埋点系统
+    analytics.init({
+      // 实际项目中需要替换为真实接口
+      reportUrl: 'https://test/analytics',
+      maxCacheSize: 20
+    });
+    
     // 通过对比版本号兼容基础库
     try {
       let userV = wx.getSystemInfoSync().SDKVersion;
@@ -72,7 +88,8 @@ App({
   },
 
   onHide: function () {
-    
+    // 应用隐藏时上报所有缓存的埋点数据
+    analytics.flush();
   },
 
   onError: function (error) {

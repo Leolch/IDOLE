@@ -103,25 +103,26 @@ Page({
           toastTitle: '获取详情失败，请重试！'
         });
       });
-  sumFn(arr){
-    var s = 0;
-    arr.forEach((val, idx)=> {
-        s += val;
-    })
-    return s;
-  },
-  handleCodeAnd(e){
-    console.log(e)
-    let colorCode = e.target.dataset.codecolor || '';
-    if(colorCode) {
-      this.setData({
-        handleColorVal: colorCode,
-        codeAndClolorContainer: true,
-        codeContainer: false
+    },
+    sumFn(arr){
+      var s = 0;
+      arr.forEach((val, idx)=> {
+          s += val;
       })
-      this.getDetail(this.data.handleVal, this.data.handleColorVal)
-    }
-  },
+      return s;
+    },
+    handleCodeAnd(e){
+      console.log(e)
+      let colorCode = e.target.dataset.codecolor || '';
+      if(colorCode) {
+        this.setData({
+          handleColorVal: colorCode,
+          codeAndClolorContainer: true,
+          codeContainer: false
+        })
+        this.getDetail(this.data.handleVal, this.data.handleColorVal)
+      }
+    },
   onLoad(options) {
     const { itemCode = '' } = options;
     if (itemCode) {
